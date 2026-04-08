@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HookBrain Lite</title>
+</head>
+<body>
+  <h1>HookBrain Lite 🧠</h1>
+
+  <textarea id="hook" placeholder="Enter your hook..." rows="4" cols="50"></textarea>
+  <br><br>
+
+  <button onclick="analyze()">Analyze</button>
+
+  <h2>Scores:</h2>
+  <pre id="scores"></pre>
+
+  <h2>Rewrites:</h2>
+  <pre id="rewrites"></pre>
+
+  <script>
+    async function analyze() {
+      const hook = document.getElementById("hook").value;
+
+      const res = await fetch("/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ hook })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("scores").innerText = JSON.stringify(data.scores, null, 2);
+      document.getElementById("rewrites").innerText = data.rewrites;
+    }
+  </script>
+</body>
+</html>
