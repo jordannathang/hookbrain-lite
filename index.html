@@ -21,7 +21,7 @@
     async function analyze() {
       const hook = document.getElementById("hook").value;
 
-      const res = await fetch("/analyze", {
+      const res = await fetch("/api/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
