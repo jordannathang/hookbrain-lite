@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HookBrain Lite 🧠</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+    textarea {
+      width: 60%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    pre {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: left;
+      width: 60%;
+      margin: 20px auto;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>HookBrain Lite 🧠</h1>
+
+  <textarea id="hook" placeholder="Enter your hook here..." rows="4"></textarea>
+  <br>
+
+  <button onclick="analyze()">Analyze</button>
+
+  <h2>Scores:</h2>
+  <pre id="scores">Waiting...</pre>
+
+  <h2>Rewrites:</h2>
+  <pre id="rewrites">Waiting...</pre>
+
+  <script>
+    async function analyze() {
+      const hook = document.getElementById("hook").value;
+
+      if (!hook) {
+        alert("Please enter a hook!");
+        return;
+      }
+
+      document.getElementById("scores").innerText = "Analyzing...";
+      document.getElementById("rewrites").innerText = "Generating...";
+
+      try {
+        const res = await fetch("/api/analyze", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ hook })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("scores").innerText = JSON.stringify(data.scores, null, 2);
+        document.getElementById("rewrites").innerText = data.rewrites;
+
+      } catch (err) {
+        document.getElementById("scores").innerText = "Error";
+        document.getElementById("rewrites").innerText = err.toString();
+      }
+    }
+  </script>
+
+</body>
+</html>
